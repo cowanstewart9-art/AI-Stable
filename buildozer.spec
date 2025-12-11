@@ -44,7 +44,11 @@ fullscreen = 0
 android.presplash_color = #FFFFFF
 
 # (list) Permissions
-android.permissions = INTERNET,WRITE_EXTERNAL_STORAGE
+android.permissions = INTERNET,WRITE_EXTERNAL_STORAGE,FOREGROUND_SERVICE
+
+# (list) List of service to declare
+# services = NAME:ENTRYPOINT_TO_PY,NAME2:ENTRYPOINT2_TO_PY
+services = AIManagerService:src/service.py
 
 # (int) Target Android API, should be as high as possible.
 android.api = 33

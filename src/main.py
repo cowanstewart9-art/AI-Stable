@@ -4,6 +4,7 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.textinput import TextInput
+from kivy.utils import platform
 from manager import AIManager
 import random
 import time
@@ -19,6 +20,29 @@ class AIManagerApp(App):
     def build(self):
         self.manager = AIManager()
         self.manager.register_ai("DummyAI", dummy_ai_function)
+
+        if platform == 'android':
+            try:
+                from jnius import autoclass
+                PythonActivity = autoclass('org.kivy.android.PythonActivity')
+                activity = PythonActivity.mActivity
+                context = activity.getApplicationContext()
+
+                # The service name format is typically: <package_domain>.<package_name>.Service<ServiceName>
+                # buildozer.spec has: package.domain=org.test, package.name=aimanager
+                # service name = AIManagerService
+                # So the class should be: org.test.aimanager.ServiceAimanagerservice
+                # Note: Buildozer capitalizes the first letter of the service name after 'Service'
+
+                service_name = 'org.test.aimanager.ServiceAimanagerservice'
+                service_class = autoclass(service_name)
+                service = service_class
+
+                # Start service
+                service.start(activity, '')
+                self.manager.logger.log("INFO", "UI", "Attempted to start background service")
+            except Exception as e:
+                self.manager.logger.log("ERROR", "UI", f"Failed to start service: {e}")
 
         layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
 
