@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run Gemini Reviewer
-        uses: google-labs-jules/gemini-helper-action@main # Replace with your repo/action path
+        uses: google-labs-jules/gemini-helper-action@v1 # Use a specific version tag
         with:
           gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -39,6 +39,13 @@ jobs:
 2. **Add Secrets**: Go to your repository settings -> Secrets and variables -> Actions, and add:
    - `GEMINI_API_KEY`: Your Google Gemini API Key.
    - `GITHUB_TOKEN`: This is automatically provided by GitHub, but you can explicitly pass it.
+
+## Releases
+
+This repository is configured to automatically publish releases and Docker images.
+
+- **Releases**: Created automatically when a tag starting with `v` (e.g., `v1.0.0`) is pushed.
+- **Docker Images**: Pushed to GitHub Container Registry (GHCR) with every release.
 
 ## Local Development & Build
 
